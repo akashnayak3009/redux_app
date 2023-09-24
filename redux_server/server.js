@@ -1,49 +1,107 @@
-import { createStore, applyMiddleware } from "redux";
-import logger from 'redux-logger';
-//  CONSTANT CREATED    
+import { createStore, applyMiddleware, combineReducers } from "redux";
+import logger from "redux-logger";
+import axios from "axios";
+import thunk from "redux-thunk";
 
-const inc ='increment';
-const dec = 'decrement';
-const incByAmount= 'increaseByAmount';
+//  CONSTANT CREATED
 
-//
+const inc = "increment";
+const dec = "decrement";
+const incByAmount = "increaseByAmount";
+const init = "init";
+
+//Root Reducer
+
+const rootReducer = combineReducers({
+    account: accountReducer,
+    bonus: bonusReducer,
+});
 
 // const history =[];
 
-const store =createStore(reducer, applyMiddleware(logger.default));
+// Central Store
+const store = createStore(
+    rootReducer,
+    applyMiddleware(logger.default, thunk.default)
+);
 
-function reducer(state={amount:1}, action){
+//Reducer function Account
+function accountReducer(state = { amount: 0 }, action) {
+    switch (action.type) {
+        case init: {
+            return { amount: action.payload };
+        }
+        case inc: {
+            return { amount: state.amount + 100 };
+        }
+        case dec: {
+            return { amount: state.amount - 100 };
+        }
+        case incByAmount: {
+            return { amount: state.amount + action.payload };
+        }
+        default: {
+            return state;
+        }
+    }
+}
 
-    if(action.type === inc){
-        return { amount: state.amount + 1}
+//Reducer function Bonus
+function bonusReducer(state = { points: 0 }, action) {
+    switch (action.type) {
+        case incByAmount: {
+           if( action.payload>=100){
+            return { points: state.points + 10 };
+           }
+         
+        }
+        default: {
+            return state;
+        }
     }
-    if(action.type === dec){
-        return { amount: state.amount -1}
-    }
-    if(action.type === incByAmount){
-        return {amount: state.amount + state.payload}
-    }
-     
-    return state
-};
+}
+
+//Global State
 
 // store.subscribe(()=>{
 // history.push(store.getState());
 // console.log(history)
 // });
 
-function increment(){
-    return {type: inc}
+//Async API call && Actions 
+
+function getUser(id) {
+    return async (dispatch, getState) => {
+        const response = await axios.get(`http://localhost:3000/account/${id}`);
+        const data = response.data;
+        dispatch(initUser(data.amount));
+    };
 }
 
-function decrement(){
-    return {type: dec}
+//Actions 
+
+function initUser(value) {
+    return { type: init, payload: value };
 }
 
-function increaseByAmount(){
-    return {type: incByAmount}
+function increment() {
+    return { type: inc };
 }
 
-setInterval(()=>{
-    store.dispatch(increment())
-},2000)
+function decrement() {
+    return { type: dec };
+}
+
+function increaseByAmount(value) {
+    return { type: incByAmount, payload:value };
+}
+
+setTimeout(() => {
+    // store.dispatch(getUser(1));
+    store.dispatch(increaseByAmount(200));
+}, 5000);
+
+
+
+//START THE FAKE SERVER FIRST IN THE OTHER TERMINAL
+//json-server db.json
