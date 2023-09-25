@@ -5,10 +5,11 @@ import thunk from "redux-thunk";
 
 //  CONSTANT CREATED
 
-const inc = "increment";
-const dec = "decrement";
-const incByAmount = "increaseByAmount";
-const init = "init";
+const init = "account/init";
+const inc = "account/increment";
+const dec = "account/decrement";
+const incByAmount = "account/increaseByAmount";
+const incBonus = 'bonus/increment'
 
 //Root Reducer
 
@@ -49,6 +50,9 @@ function accountReducer(state = { amount: 0 }, action) {
 //Reducer function Bonus
 function bonusReducer(state = { points: 0 }, action) {
     switch (action.type) {
+        case incBonus:{
+            return { points: state.points + 10 };
+        }
         case incByAmount: {
            if( action.payload>=100){
             return { points: state.points + 10 };
@@ -70,7 +74,7 @@ function bonusReducer(state = { points: 0 }, action) {
 
 //Async API call && Actions 
 
-function getUser(id) {
+function getAccount(id) {
     return async (dispatch, getState) => {
         const response = await axios.get(`http://localhost:3000/account/${id}`);
         const data = response.data;
@@ -96,9 +100,15 @@ function increaseByAmount(value) {
     return { type: incByAmount, payload:value };
 }
 
+function incrementBonus(value) {
+    return { type: incBonus};
+}
+
+
 setTimeout(() => {
-    // store.dispatch(getUser(1));
-    store.dispatch(increaseByAmount(200));
+    // store.dispatch(getAccount(1));
+    // store.dispatch(increaseByAmount(200));
+    store.dispatch(incrementBonus());
 }, 5000);
 
 
