@@ -106,7 +106,7 @@ function incrementBonus(value) {
 
 
 setTimeout(() => {
-    // store.dispatch(getAccount(1));
+    // store.dispatch(getAccount (1));
     // store.dispatch(increaseByAmount(200));
     store.dispatch(incrementBonus());
 }, 5000);

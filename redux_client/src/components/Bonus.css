@@ -1,0 +1,43 @@
+.card1 {
+    width: 300px;
+    margin: 20px;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .container1 {
+    text-align: center;
+  }
+  
+  h4 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  h3 {
+    font-size: 28px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    color: #444;
+  }
+  
+  button {
+    padding: 10px 20px;
+    font-size: 16px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #2196f3;
+    color: #fff;
+    transition: background-color 0.3s ease-in-out;
+  }
+  
+  button:hover {
+    background-color: #1976d2;
+  }
+  
