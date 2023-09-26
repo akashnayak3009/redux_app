@@ -1,21 +1,15 @@
 import React, { useState } from 'react';
 import './Account.css'; // Import your CSS file
+import { useDispatch, useSelector } from 'react-redux';
+import { decrement, increaseByAmount, increment } from '../actions';
 
 const Account = () => {
-  const [account, setAccount] = useState({ amount: 0 });
   const [value, setValue] = useState(0);
 
-  const increment = () => {
-    setAccount({ amount: account.amount + 1 });
-  };
+  const amount = useSelector(state=>state.account.amount);
+  const points =  useSelector(state=>state.bonus.points);
 
-  const decrement = () => {
-    setAccount({ amount: account.amount - 1 });
-  };
-
-  const incrementByAmount = (value) => {
-    setAccount({ amount: account.amount + value });
-  };
+  const dispatch =useDispatch();
 
   return (
     <div className='card'>
@@ -23,11 +17,11 @@ const Account = () => {
         <h4>
           <b>Account Components</b>
         </h4>
-        <h3>Amount: ${account.amount}</h3>
-        <button className='increment-btn' onClick={increment}>
+        <h3>Amount:{amount} </h3>
+        <button className='increment-btn' onClick={()=>dispatch(increment())} >
           Increment +
         </button>
-        <button className='decrement-btn' onClick={decrement}>
+        <button className='decrement-btn' onClick={()=>dispatch(decrement())}>
           Decrement -
         </button>
         <input
@@ -38,7 +32,7 @@ const Account = () => {
         />
         <button
           className='increment-amount-btn'
-          onClick={() => incrementByAmount(value)}
+          onClick={() => dispatch(increaseByAmount(value))}
         >
           Increment by {value} +
         </button>
